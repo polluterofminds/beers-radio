@@ -2,11 +2,15 @@ import About from "@/components/About";
 import Nav from "@/components/Nav";
 import { FeedSchema } from "@/types";
 import Link from "next/link";
+import { PinataSDK } from "pinata";
+
+const pinata = new PinataSDK({
+  pinataJwt: process.env.PINATA_JWT,
+  pinataGateway: process.env.NEXT_PUBLIC_GATEWAY_URL,
+});
 
 export default async function Home(props: any) {
-  const data = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/feed`).then((res) =>
-    res.json()
-  )
+  const data: any = await pinata.gateways.get(process.env.NEXT_PUBLIC_ORIGINAL_CID!)   
 
   const allEntries = data.data.map((feed: FeedSchema) => {
     return {
@@ -46,7 +50,7 @@ export default async function Home(props: any) {
               >
                 <div>
                   <p className="text-sm font-semibold leading-6 text-white-900">
-                    <Link href={`/${encodeURI(entry.podcastTitle || "")}`} className="hover:underline">
+                    <Link href={`/${encodeURI(entry.title || "")}`} className="hover:underline">
                       {entry.title}
                     </Link>
                     <br />

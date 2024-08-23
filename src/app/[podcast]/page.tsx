@@ -2,14 +2,19 @@ import About from "@/components/About";
 import Nav from "@/components/Nav";
 import { Entry, FeedSchema } from "@/types";
 import Link from "next/link";
+import { PinataSDK } from "pinata";
+
+const pinata = new PinataSDK({
+  pinataJwt: process.env.PINATA_JWT,
+  pinataGateway: process.env.NEXT_PUBLIC_GATEWAY_URL,
+});
+
 
 export default async function Home(props: any) {
-  const data = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/feed`).then((res) =>
-    res.json()
-  )
+  const data: any = await pinata.gateways.get(process.env.NEXT_PUBLIC_ORIGINAL_CID!)   
 
   const podcastTitle = decodeURI(props.params.podcast);
-  console.log(podcastTitle)
+
   const allEntries = data.data.flatMap((feed: FeedSchema) =>
     feed.entries.map(entry => ({
       ...entry,
@@ -17,8 +22,6 @@ export default async function Home(props: any) {
       podcastLink: feed.link
     }))
   );
-
-  console.log()
 
   //  @ts-ignore
   const sortedEntries = allEntries.filter((entry: Entry) => entry.podcastTitle === podcastTitle).sort((a, b) => new Date(b.published) - new Date(a.published));

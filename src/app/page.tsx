@@ -2,12 +2,16 @@ import About from "@/components/About";
 import Nav from "@/components/Nav";
 import { Entry, FeedSchema } from "@/types";
 import Link from "next/link";
+import { PinataSDK } from "pinata";
+
+const pinata = new PinataSDK({
+  pinataJwt: process.env.PINATA_JWT,
+  pinataGateway: process.env.NEXT_PUBLIC_GATEWAY_URL,
+});
 
 export default async function Home() {
-  const data = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/feed`).then((res) =>
-    res.json()
-  )
-  const allEntries = data.data.flatMap((feed: FeedSchema) =>
+  const data: any = await pinata.gateways.get(process.env.NEXT_PUBLIC_ORIGINAL_CID!)   
+  const allEntries = data?.data?.flatMap((feed: FeedSchema) =>
     feed.entries.map(entry => ({
       ...entry,
       podcastTitle: feed.title,
@@ -19,7 +23,7 @@ export default async function Home() {
   const sortedEntries = allEntries.sort((a, b) => new Date(b.published) - new Date(a.published));
 
   const mostRecentEntries = sortedEntries.slice(0, 10);
-
+  console.log(mostRecentEntries)
   let page = "recent"
 
   const getPageName = () => {
