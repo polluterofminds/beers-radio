@@ -1,4 +1,5 @@
 import About from "@/components/About";
+import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
 import { FeedSchema } from "@/types";
 import Link from "next/link";
@@ -10,7 +11,7 @@ const pinata = new PinataSDK({
 });
 
 export default async function Home(props: any) {
-  const data: any = await pinata.gateways.get(process.env.NEXT_PUBLIC_ORIGINAL_CID!)   
+  const data: any = await pinata.gateways.get(process.env.NEXT_PUBLIC_ORIGINAL_CID!)
 
   const allEntries = data.data.map((feed: FeedSchema) => {
     return {
@@ -85,12 +86,7 @@ export default async function Home(props: any) {
           </ul>
         </div>
       </div>
-      <footer className="py-10 px-8">
-        <ul>
-          <li className="text-xs font-light"><Link href="privacy">Privacy Policy</Link></li>
-          <li className="text-xs font-light"><Link href="terms">Terms of Use</Link></li>
-        </ul>
-      </footer>
+      <Footer />
     </main>
   );
 }

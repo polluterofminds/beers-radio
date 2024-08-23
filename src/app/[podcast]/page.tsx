@@ -1,4 +1,5 @@
 import About from "@/components/About";
+import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
 import { Entry, FeedSchema } from "@/types";
 import Link from "next/link";
@@ -11,7 +12,7 @@ const pinata = new PinataSDK({
 
 
 export default async function Home(props: any) {
-  const data: any = await pinata.gateways.get(process.env.NEXT_PUBLIC_ORIGINAL_CID!)   
+  const data: any = await pinata.gateways.get(process.env.NEXT_PUBLIC_ORIGINAL_CID!)
 
   const podcastTitle = decodeURI(props.params.podcast);
 
@@ -27,9 +28,9 @@ export default async function Home(props: any) {
   const sortedEntries = allEntries.filter((entry: Entry) => entry.podcastTitle === podcastTitle).sort((a, b) => new Date(b.published) - new Date(a.published));
 
   let page = "recent"
-  
+
   const getPageName = () => {
-    switch(page) {
+    switch (page) {
       case "recent":
       default:
         return "Recent Episodes"
@@ -43,10 +44,10 @@ export default async function Home(props: any) {
         <div className="hidden sm:block w-1/4">
           <h3 className="font-bold text-xl">Discover</h3>
           <div className="my-2">
-            <Link href="/" className="font-light rounded-lg px-6 py-2 hover:underline">Recent</Link>            
+            <Link href="/" className="font-light rounded-lg px-6 py-2 hover:underline">Recent</Link>
           </div>
           <div className="my-2">
-            <button className="font-light rounded-lg px-6 py-2 hover:underline">Browse</button>            
+            <button className="font-light rounded-lg px-6 py-2 hover:underline">Browse</button>
           </div>
           <About />
         </div>
@@ -98,12 +99,7 @@ export default async function Home(props: any) {
           </ul>
         </div>
       </div>
-      <footer className="py-10 px-8">
-        <ul>
-          <li className="text-xs font-light"><Link href="privacy">Privacy Policy</Link></li>
-          <li className="text-xs font-light"><Link href="terms">Terms of Use</Link></li>
-        </ul>
-      </footer>
+      <Footer />
     </main>
   );
 }
